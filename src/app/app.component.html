@@ -21,41 +21,48 @@
                     <div class="mat-elevation-z8">
                         <table mat-table [dataSource]="dataSource" matSort class="table-hover w-100">
 
-                            <!-- ID Column -->
+                            <!-- código Column -->
                             <ng-container matColumnDef="code">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-                                <td mat-cell *matCellDef="let row"> {{row.code}} </td>
+                                <td mat-cell *matCellDef="let user"> {{user.code}} </td>
                             </ng-container>
 
-                            <!-- Progress Column -->
+                            <!-- Nombre Column -->
                             <ng-container matColumnDef="name">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                                <td mat-cell *matCellDef="let user" (click)="editUser(user)">{{user.name}} </td>
                             </ng-container>
 
-                            <!-- Name Column -->
+                            <!-- Apellidos Column -->
                             <ng-container matColumnDef="lastname">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
-                                <td mat-cell *matCellDef="let row"> {{row.lastname}} </td>
+                                <td mat-cell *matCellDef="let user"> {{user.lastname}} </td>
                             </ng-container>
 
-                            <!-- Color Column -->
+                            <!-- Edad Column -->
                             <ng-container matColumnDef="age">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
-                                <td mat-cell *matCellDef="let row" [style.color]="row.age"> {{row.age}} </td>
+                                <td mat-cell *matCellDef="let user"> {{user.age}} </td>
+                            </ng-container>
+
+                            <!-- acciones Column -->
+                            <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <td mat-cell *matCellDef="let user">
+                                    <button class="btn btn-primary mr-1" (click)="onPreUpdateUser(user)">Editar</button>
+                                    <button class="btn btn-danger" (click)="onDeleteUser(user.id)">Eliminar</button>
+                                </td>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                            <tr mat-row *matRowDef="let user; columns: displayedColumns;">
                             </tr>
                         </table>
 
-                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                     </div>
                     <!-- End Grilla -->
-                    <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.
-                    </p>
+
                 </mat-card-content>
             </mat-card>
 
@@ -67,7 +74,7 @@
 
             <mat-card class="example-card">
                 <mat-card-header>
-                    <mat-card-title>Actualizar</mat-card-title>
+                    <mat-card-title>{{ !this._api.selectedUser.id ? 'Registrar Usuario' : 'Modificar Usuario' }}</mat-card-title>
                     <mat-card-subtitle>Aquí puede modificar los registros</mat-card-subtitle>
                 </mat-card-header>
                 <mat-divider></mat-divider>
@@ -76,37 +83,37 @@
                     <br>
                     <br>
                     <!-- Formulario -->
-                    <form class="example-form">
+                    <form class="example-form" #formUser="ngForm" (ngSubmit)="onSaveUser(formUser)">
+
+                        <input type="hidden" id="userId" name="userId" class="form-control" [(ngModel)]="this._api.selectedUser.id">
+
                         <mat-form-field class="example-full-width">
                             <mat-label>Código</mat-label>
-                            <input matInput placeholder="000">
+                            <input matInput id="code" name="code" placeholder="00" [(ngModel)]="this._api.selectedUser.code">
                         </mat-form-field>
 
                         <mat-form-field class="example-full-width">
                             <mat-label>Nombre</mat-label>
-                            <input matInput placeholder="Joe">
+                            <input matInput id="name" name="name" placeholder="Joe" [(ngModel)]="this._api.selectedUser.name">
                         </mat-form-field>
 
                         <mat-form-field class="example-full-width">
                             <mat-label>Apellidos</mat-label>
-                            <input matInput placeholder="Smith">
+                            <input matInput id="lastname" name="lastname" placeholder="Smith" [(ngModel)]="this._api.selectedUser.lastname">
                         </mat-form-field>
 
                         <mat-form-field class="example-full-width">
                             <mat-label>Edad</mat-label>
-                            <input type="number" matInput placeholder="00">
+                            <input type="number" id="age" name="age" matInput placeholder="00" [(ngModel)]="this._api.selectedUser.age">
                         </mat-form-field>
+
+                        <button type="submit" mat-raised-button color="primary">Guardar</button>
+                        <button mat-raised-button type="reset" color="warn">Cancelar</button>
+
                     </form>
                     <!-- End Formulario -->
 
-                    <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.
-                    </p>
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-raised-button color="primary">Guardar</button>
-                    <button mat-raised-button color="warn">Cancelar</button>
-                </mat-card-actions>
             </mat-card>
 
         </div>
